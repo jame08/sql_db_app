@@ -1,8 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require('console.table');
-var article = 0;
-var quantity = 0;
+var receipt = [];
 
 
 var connection = mysql.createConnection({
@@ -21,7 +20,7 @@ var connection = mysql.createConnection({
 
 
 
-displayProducts();
+
 Init();
 
 
@@ -38,6 +37,8 @@ Init();
 
 function Init(){
 
+  displayProducts();
+
   inquirer.prompt([
     {
       name: "id",
@@ -49,8 +50,8 @@ function Init(){
     }
   
   ]).then(function(answers) {
-    article = answers.id;
-    quantity = answers.quantity;
+   var article = answers.id;
+   var quantity = answers.quantity;
     confirmStock(article,quantity);
   });
   
@@ -72,7 +73,7 @@ function Init(){
 
   function confirmStock(id,quantity){
 
-    var query = "select stock_quantity from products where item_id = " + mysql.escape(id);
+    var query = "select stock_quantity, price from products where item_id = " + mysql.escape(id);
     connection.query(query, function(err, results){
 
       if (err) throw err;
@@ -81,7 +82,9 @@ function Init(){
       if (results[0].stock_quantity >= quantity ){
         var newVal = results[0].stock_quantity - quantity;
         console.log("We are placing your purcharse");
-        processPurchase(article,newVal);
+        processPurchase(id,newVal);
+        console.log("This is your receipt:");
+        customerReceipt(id,quantity,results[0].price);
        
 
       }else {
@@ -99,8 +102,15 @@ function Init(){
     connection.query(query, function(err, results){
 
       if (err) throw err;
-      
-
     })
   }
 
+function customerReceipt(id,quantity,price){
+
+  var total =  quantity * price;
+  receipt.push({ProductID: id , Quantity: quantity,Price: price, Total: total });
+
+  console.table(receipt);
+  console.log("You pay: " + total);
+  console.log("Thanks For Shopping with us");
+}
