@@ -1,8 +1,11 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require('console.table');
-var receipt = [];
-var artCount= 0;
+
+const receipt = [];
+
+
+
 
 
 var connection = mysql.createConnection({
@@ -28,12 +31,13 @@ displayProducts();
 
 function Init() {
 
-  
+
 
   inquirer.prompt([
     {
       name: "id",
       message: "Which article would you like to buy ? (Use Id number)"
+
     },
     {
       name: "quantity",
@@ -41,9 +45,9 @@ function Init() {
     }
 
   ]).then(function (answers) {
-    var article = answers.id;
+    var id = answers.id;
     var quantity = answers.quantity;
-    verifyStock(article,quantity);
+    verifyStock(id, quantity);
 
   });
 
@@ -67,51 +71,59 @@ function displayProducts() {
 }
 
 
-function verifyStock(article,quantity){
+function verifyStock(id, quantity) {
 
-  var query1 = "SELECT COUNT(*) as total FROM products"; 
+  var query = "SELECT COUNT(*) as total FROM products";
+  var artCount = 0;
+  connection.query(query, function (err, results) {
 
+  if (err) throw err;
 
-  connection.query(query1, function (err, results) {
-    
-        if (err) throw err;
-      
-       artCount = results[0].total;
-        
-      
-      });
+   artCount = results[0].total;
 
-      console.log("artcount : " + artCount)
-      if(quantity > artCount){
+   if (id > artCount) {
 
-        console.log("Sorry this product does not exist. Please select a product from the product list\n");
-        Init();
-      
-      }else
-      {
-        confirmPurcharse(article,quantity);
-      
-      }
+    console.log("Sorry this product does not exist. Please select a product from the product list\n");
+    Init();
 
+  } else {
+    confirmPurcharse(id, quantity);
+
+  }
+  
+  });
 }
+
+// function testTest(id,quantity, artCount){
+
+//   if (id > artCount) {
+
+//     console.log("Sorry this product does not exist. Please select a product from the product list\n");
+//     Init();
+
+//   } else {
+//     confirmPurcharse(id, quantity);
+
+//   }
+// }
 
 
 function confirmPurcharse(id, quantity) {
-  
-  var query = "select stock_quantity, price, product_name from products where item_id = " + mysql.escape(id);
- 
 
-//query that retrieve the items from stock
+  var query = "select stock_quantity, price, product_name from products where item_id = " + mysql.escape(id);
+
+
+  //query that retrieve the items from stock
   connection.query(query, function (err, results) {
 
     if (err) throw err;
-  
+
 
     if (results[0].stock_quantity >= quantity) {
       var newVal = results[0].stock_quantity - quantity;
       console.log("\n**********************************************************************\n");
       console.log("We are placing your purcharse \n");
-      
+
       processPurchase(id, newVal);
       console.log("This is your receipt: \n");
       customerReceipt(id, quantity, results[0].price, results[0].product_name);
@@ -134,25 +146,22 @@ function processPurchase(id, newVal) {
   connection.query(query, function (err, results) {
 
     if (err) throw err;
-    
+
   })
 }
 
-function customerReceipt(id, quantity, price,name) {
-  
+function customerReceipt(id, quantity, price, name) {
+
   var subtotal = quantity * price;
-  
-  
-  obj = { Product_ID: id, Name: name, Quantity: quantity, Price: price, Total: subtotal }
+
+  obj = { Product_ID: id, Name: name, Quantity: quantity, Price: price, SubTotal: subtotal }
   receipt.push(obj);
- 
 
-
-  
+  var total = receipt.reduce((total, obj) =>  total + obj.SubTotal, 0);
 
 
   console.table(receipt);
-  console.log("You pay: \n" );
+  console.log("You pay: \n" + total + "  | with taxes: " + total * .18);
 
   inquirer.prompt([
     {
