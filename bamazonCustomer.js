@@ -94,18 +94,7 @@ function verifyStock(id, quantity) {
   });
 }
 
-// function testTest(id,quantity, artCount){
 
-//   if (id > artCount) {
-
-//     console.log("Sorry this product does not exist. Please select a product from the product list\n");
-//     Init();
-
-//   } else {
-//     confirmPurcharse(id, quantity);
-
-//   }
-// }
 
 
 function confirmPurcharse(id, quantity) {
