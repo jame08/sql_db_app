@@ -1,11 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require('console.table');
-
 const receipt = [];
-
-
-
 
 
 var connection = mysql.createConnection({
@@ -47,7 +43,7 @@ function Init() {
   ]).then(function (answers) {
     var id = answers.id;
     var quantity = answers.quantity;
-    verifyStock(id, quantity);
+    productExist(id, quantity);
 
   });
 
@@ -71,7 +67,7 @@ function displayProducts() {
 }
 
 
-function verifyStock(id, quantity) {
+function productExist(id, quantity) {
 
   var query = "SELECT COUNT(*) as total FROM products";
   var artCount = 0;
@@ -116,6 +112,7 @@ function confirmPurcharse(id, quantity) {
       processPurchase(id, newVal);
       console.log("This is your receipt: \n");
       customerReceipt(id, quantity, results[0].price, results[0].product_name);
+      saleProduct(id,quantity,results[0].price);
 
 
     } else {
@@ -128,6 +125,20 @@ function confirmPurcharse(id, quantity) {
 
 
 };
+
+function saleProduct(id,quantity,price){
+
+  var sale = quantity * price;
+
+  var query = "update products set product_sales= " + mysql.escape(sale) + " where item_id = " + mysql.escape(id);
+  connection.query(query, function (err, results) {
+
+    if (err) throw err;
+
+  })
+
+
+}
 
 function processPurchase(id, newVal) {
 
@@ -150,7 +161,7 @@ function customerReceipt(id, quantity, price, name) {
 
 
   console.table(receipt);
-  console.log("You pay: \n" + total + "  | with taxes: " + total * .18);
+  console.log("\nYou pay: " + total + "  | with taxes: " + total * .18);
 
   inquirer.prompt([
     {
@@ -167,7 +178,8 @@ function customerReceipt(id, quantity, price, name) {
 
     } else {
 
-      console.log("Thanks For Shopping with us! ")
+      console.log("\nThanks For Shopping with us! \n")
+      connection.end();
     }
 
   });

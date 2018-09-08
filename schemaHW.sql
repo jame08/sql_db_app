@@ -12,6 +12,16 @@ primary key (item_id)
 
 );
 
+create table  departments(
+
+department_id int not null auto_increment,
+department_name varchar(150) not null,
+over_head_cost int (30) not null, 
+
+primary key (department_id)
+
+);
+
 insert into products (product_name, department_name,price,stock_quantity)
 values ('Sandals','Clothing',8,40);
 insert into products (product_name, department_name,price,stock_quantity)

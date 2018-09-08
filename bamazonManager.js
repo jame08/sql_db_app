@@ -4,10 +4,6 @@ const cTable = require('console.table');
 
 const receipt = [];
 
-
-
-
-
 var connection = mysql.createConnection({
   host: "localhost",
 
@@ -125,7 +121,7 @@ function reapeat(){
     
       ]).then(function (answers) {
     
-        if (answers.reapeat === true) {
+        if (answers.repeat === true) {
     
           Init();
     
@@ -198,7 +194,7 @@ function addNewProduct(product_name,department,price,stock){
 
 function addStock(id,quantity){
 
-    var query = "UPDATE products set stock_quantity = "+ mysql.escape(quantity) +" where item_id = " + mysql.escape(id);
+    var query = "UPDATE products set stock_quantity = stock_quantity +"+ mysql.escape(quantity) +" where item_id = " + mysql.escape(id);
     connection.query(query, function (err, results) {
   
     if (err) throw err;
