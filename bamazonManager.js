@@ -103,14 +103,9 @@ function Init (){
       });
 }
 
-
-
-
-
-
 // functions 
 
-function reapeat(){
+function repeat(){
 
     inquirer.prompt([
         {
@@ -149,7 +144,7 @@ function viewProductForSale (){
           console.log("\n**********************************************************************\n");
           console.table(res);
           console.log("\n**********************************************************************\n");
-          reapeat();
+          repeat();
        
         });
       }
@@ -167,7 +162,7 @@ function lowInventory(){
         console.table(results);
         console.log("\n**********************************************************************\n");
 
-        reapeat();
+        repeat();
     
     });
 
@@ -187,7 +182,7 @@ function addNewProduct(product_name,department,price,stock){
         console.log("Inserted Id: "+results.insertId);
         console.log("\n**********************************************************************\n");
 
-        reapeat();
+        repeat();
     });
 
 }
@@ -203,7 +198,7 @@ function addStock(id,quantity){
         console.log("\nProduct Stock Updated ! \n\n");
         console.table("Affected Rows: "+results.affectedRows);
         console.log("\n**********************************************************************\n");
-        reapeat();
+        repeat();
     
     });
 

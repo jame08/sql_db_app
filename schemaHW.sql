@@ -85,3 +85,12 @@ values ('Oregano','Food',2,92);
 insert into products (product_name, department_name,price,stock_quantity)
 values ('Sunflower','Food',1,58);
 
+
+
+use bamazon;
+select departments.department_id ,departments.department_name, departments.over_head_cost, 
+SUM(products.product_sales) as product_sales, (departments.over_head_cost - SUM(products.product_sales) ) as total_profits
+from departments
+join products
+ on  departments.department_name = products.department_name
+ group  by departments.department_id order by departments.department_id asc;
