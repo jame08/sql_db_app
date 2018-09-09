@@ -1,8 +1,12 @@
 
+require("dotenv").config();
+var credentials = require("./credentials");
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require('console.table');
+
 const {validateNumber, validateStr} = require('./validate');
+
 
 
 const receipt = [];
@@ -15,10 +19,10 @@ var connection = mysql.createConnection({
   port: 3306,
 
   // Your username
-  user: "root",
+  user: credentials.db.user,
 
   // Your password
-  password: "jonas",
+  password: credentials.db.password,
   database: "bamazon"
 });
 

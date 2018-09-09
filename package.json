@@ -18,6 +18,7 @@
   "homepage": "https://github.com/jame08/sql_db_app#readme",
   "dependencies": {
     "console.table": "^0.10.0",
+    "dotenv": "^6.0.0",
     "inquirer": "^6.2.0",
     "mysql": "^2.16.0",
     "promt": "0.0.0"
