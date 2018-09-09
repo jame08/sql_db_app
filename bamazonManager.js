@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require('console.table');
+const {validateNumber, validateStr} = require('./validate');
 
 const receipt = [];
 
@@ -48,12 +49,14 @@ function Init (){
         inquirer.prompt([
             {
               name: "id",
-              message: "Which article would you like to stock up ? (Use Id number)"
+              message: "Which article would you like to stock up ? (Use Id number)",
+              validate: validateNumber
         
             },
             {
               name: "quantity",
-              message: "How many of this article?"
+              message: "How many of this article?",
+              validate: validateNumber
             }
         
           ]).then(function (answers) {
@@ -70,21 +73,26 @@ function Init (){
         inquirer.prompt([
             {
               name: "name",
-              message: "New article name?"
+              message: "New article name?",
+              validate: validateStr
         
             },
             {
               name: "department",
-              message: "Product department ?"
+              message: "Product department ?",
+              validate: validateStr
             },
             {
                 name: "price",
-                message: "Product Price ?"
+                message: "Product Price ?",
+                validate: validateNumber
               },
 
               {
                 name: "stock",
-                message: "Product quantity ?"
+                message: "Product quantity ?",
+                validate: validateNumber
+
               },
         
           ]).then(function (answers) {
@@ -104,6 +112,8 @@ function Init (){
 }
 
 // functions 
+
+
 
 function repeat(){
 

@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require('console.table');
+const {validateNumber, validateStr} = require('./validate');
 
 const receipt = [];
 
@@ -56,12 +57,14 @@ function addDepartment(){
     inquirer.prompt([
         {
           name: "dept",
-          message: "Whats the Department Name ?"
+          message: "Whats the Department Name ?",
+          validate: validateStr
     
         },
         {
           name: "overhead",
           message: "Department Over Head ?",
+          validate:validateNumber
       
         }
     

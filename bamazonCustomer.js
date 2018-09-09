@@ -1,6 +1,10 @@
+
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require('console.table');
+const {validateNumber, validateStr} = require('./validate');
+
+
 const receipt = [];
 
 
@@ -32,12 +36,17 @@ function Init() {
   inquirer.prompt([
     {
       name: "id",
-      message: "Which article would you like to buy ? (Use Id number)"
+      message: "Which article would you like to buy ? (Use Id number)",
+      validate: validateNumber
+
 
     },
     {
       name: "quantity",
-      message: "How many of this article ?"
+      message: "How many of this article ?",
+      validate: validateNumber
+     
+    
     }
 
   ]).then(function (answers) {
@@ -49,6 +58,9 @@ function Init() {
 
 
 }
+
+
+
 
 
 function displayProducts() {
