@@ -134,6 +134,8 @@ function confirmPurcharse(id, quantity) {
     } else {
 
       console.log("Sorry we don't have enough stock to process your purcharse");
+      repeat();
+
     }
 
 
@@ -179,6 +181,12 @@ function customerReceipt(id, quantity, price, name) {
   console.table(receipt);
   console.log("\nYou pay: " + total + "  | with taxes: " + total * .18);
 
+  repeat();
+
+
+}
+
+function repeat(){
   inquirer.prompt([
     {
       type: "confirm",
@@ -199,5 +207,4 @@ function customerReceipt(id, quantity, price, name) {
     }
 
   });
-
 }
